@@ -1,0 +1,7 @@
+# Prettier options
+
+# Wrap markdown files at 80 chars for raw file readability.
+proseWrap: always
+
+# Use single quotes where possible.
+singleQuote: true
