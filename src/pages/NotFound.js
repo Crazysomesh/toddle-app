@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouteError } from 'react-router-dom';
-import Popup from '../components/Popup';
+import PostPopup from '../components/Popup';
 
 function ErrorPage() {
   const error = useRouteError();
@@ -13,15 +13,7 @@ function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      <Popup
-        title="Create a post"
-        helperText="Write something for your post"
-        open={open}
-        closePopup={() => setOpen(false)}
-        actionButtonHandler={() => setOpen(false)}
-        actionButtonText="Publish"
-        content={<div>Hello</div>}
-      />
+      <PostPopup open={true} closePopup={() => {}}  />
     </div>
   );
 }

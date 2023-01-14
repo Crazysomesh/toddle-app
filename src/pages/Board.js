@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
 import {
@@ -10,15 +11,17 @@ import PostsHeader from '../components/PostsHeader';
 import PostCard from '../components/Card';
 import { POSTS } from '../utils/constants';
 
-const Posts = () => {
-
-  const CreateButton = styled(Button)(() => ({
+const CreateButton = styled(Button)(() => ({
+  backgroundColor: '#D33852',
+  color: 'white',
+  '&:hover': {
     backgroundColor: '#D33852',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#D33852',
-    },
-  }));
+  },
+}));
+
+const Board = () => {
+  let { id } = useParams();
+  console.log({ id });
 
   return (
     <>
@@ -55,4 +58,4 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default Board;

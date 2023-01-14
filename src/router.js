@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
 import ErrorPage from './pages/NotFound';
-import Posts from './pages/Posts';
+import Board from './pages/Board';
 
 export default createBrowserRouter([
   {
@@ -16,7 +16,7 @@ export default createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: '/posts',
-    element: <Posts />,
+    path: '/board/:id',
+    element: <Board />,
   }
 ]);

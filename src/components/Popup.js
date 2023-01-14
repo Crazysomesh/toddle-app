@@ -42,7 +42,8 @@ const StyledCloseIcon = styled(CloseIcon)(({ theme }) => ({
 }));
 
 const Popup = ({ title, helperText, open, closePopup, actionButtonHandler, actionButtonText, content }) => {
-	return (
+	console.log({ title, helperText, open });
+  return (
 		<Dialog
         onClose={(e, reason) => {
           if (reason !== 'backdropClick') closePopup();
