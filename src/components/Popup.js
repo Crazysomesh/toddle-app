@@ -19,6 +19,7 @@ const HelperText = styled(Typography)(({ theme }) => ({
   fontSize: theme.spacing(1.75),
   fontWeight: 500,
   lineHeight: theme.spacing(2.5),
+  marginBottom: theme.spacing(4)
 }));
 
 const ActionButton = styled(Button)(() => ({
@@ -37,13 +38,12 @@ const Container = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1, 0, 5),
 }))
 
-const StyledCloseIcon = styled(CloseIcon)(({ theme }) => ({
+const StyledCloseIcon = styled(CloseIcon)(() => ({
   cursor: "pointer",
 }));
 
 const Popup = ({ title, helperText, open, closePopup, actionButtonHandler, actionButtonText, content }) => {
-	console.log({ title, helperText, open });
-  return (
+	return (
 		<Dialog
         onClose={(e, reason) => {
           if (reason !== 'backdropClick') closePopup();

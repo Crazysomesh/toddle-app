@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
 import {
   Box,
   Button,
+  Grid,
+  Typography,
 } from '@mui/material';
 
 import PostsHeader from '../components/PostsHeader';
 import PostCard from '../components/Card';
 import { POSTS } from '../utils/constants';
+import PostPopup from '../components/PostPopup';
 
 const CreateButton = styled(Button)(() => ({
   backgroundColor: '#D33852',
@@ -20,40 +23,44 @@ const CreateButton = styled(Button)(() => ({
 }));
 
 const Board = () => {
-  let { id } = useParams();
+  const { id } = useParams();
   console.log({ id });
+  const [postPopup, setPostPopup] = useState(false);
 
   return (
     <>
       <PostsHeader />
       <Box sx={{ padding: '40px 72px 0px' }}>
-        <Box>
-          <h2>Your posts</h2>
-        </Box>
-        <Box>
-          <CreateButton>
-            <AddIcon
-              sx={{
-                color: 'white',
-                height: '16px',
-                width: '16px',
-                marginRight: '4px',
-              }}
-            />
-            Create new post
-          </CreateButton>
-        </Box>
+        <Grid container justifyContent='space-between'>
+          <Grid item>
+            <Typography variant='h4'>Your posts</Typography>
+          </Grid>
+          <Grid item>
+            <CreateButton onClick={() => setPostPopup(true)}>
+              <AddIcon
+                sx={{
+                  color: 'white',
+                  height: '16px',
+                  width: '16px',
+                  marginRight: '4px',
+                }}
+              />
+              Create new post
+            </CreateButton>
+          </Grid>
+        </Grid>
+        {POSTS.map(post => (
+          <PostCard
+            key={post.title}
+            imageURL={post.imageURL}
+            content={post.content}
+            title={post.title}
+            subHeader={post.subHeader}
+            likes={post.likes}
+          />
+        ))}
       </Box>
-      {POSTS.map(post => (
-        <PostCard
-          key={post.title}
-          imageURL={post.imageURL}
-          content={post.content}
-          title={post.title}
-          subHeader={post.subHeader}
-          likes={post.likes}
-        />
-      ))}
+      <PostPopup open={postPopup} closePopup={() => setPostPopup(false)}  />
     </>
   );
 };

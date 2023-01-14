@@ -21,7 +21,7 @@ const PlaceAroundInput = styled('div')(({ theme }) => ({
 		borderColor: '#EB4761',
 	},
 	marginRight: theme.spacing(10),
-	width: theme.spacing(50),
+	width: '100%'
 }));
 
 const StyledInputBase = styled(TextField)(({ theme }) => ({
@@ -79,7 +79,7 @@ const CreateBoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
 			<><Box>
 				<PlaceAroundInput>
 					<StyledInputBase
-						placeholder="Places around the world"
+						placeholder="Board title"
 						inputProps={{ 'aria-label': 'PlaceAroundInput' }}
             onChange={(e) => setTitle(e.target.value)}
             value={title}
