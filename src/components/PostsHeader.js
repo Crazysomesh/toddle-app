@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import {
   AppBar,
   Box,
@@ -10,10 +11,11 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import toddleIcon from '../assets/images/toddle-logo.svg';
 
-const Search = styled('div')(({ theme }) => ({
+const Icon = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: '#EBEBEB',
@@ -24,7 +26,7 @@ const Search = styled('div')(({ theme }) => ({
   width: theme.spacing(35.5),
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const IconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
   position: 'absolute',
@@ -34,37 +36,12 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: '#000000',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
-
 const StyledAppBar = styled(AppBar)(() => ({
   backgroundColor: '#FFFFFF',
   position: 'static',
 }));
 
-const CreateButton = styled(Button)(() => ({
-  backgroundColor: '#D33852',
-  color: 'white',
-  '&:hover': {
-    backgroundColor: '#D33852',
-  },
-}));
-
-function Header({ newBoard }) {
+function PostsHeader() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar>
@@ -75,30 +52,26 @@ function Header({ newBoard }) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
+            <Icon>
+                <IconWrapper>
+                    <ChevronLeftIcon />
+                </IconWrapper>
+            </Icon>
             <img src={toddleIcon} alt="toddleIcon" />
+            <span>Places around the world</span>
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Search>
-              <SearchIconWrapper>
+            <Icon>
+              <IconWrapper>
                 <SearchIcon color="#717171" />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
-            <CreateButton onClick={newBoard}>
-              <AddIcon
-                sx={{
-                  color: 'white',
-                  height: '16px',
-                  width: '16px',
-                  marginRight: '4px',
-                }}
-              />
-              Create new board
-            </CreateButton>
+              </IconWrapper>
+            </Icon>
+            <Icon>
+            <IconWrapper>
+                <BookmarkBorderIcon color="#717171" />
+              </IconWrapper>
+            </Icon>
           </Box>
         </Toolbar>
       </StyledAppBar>
@@ -106,4 +79,4 @@ function Header({ newBoard }) {
   );
 }
 
-export default Header;
+export default PostsHeader;
