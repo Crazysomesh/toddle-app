@@ -61,7 +61,7 @@ const DescriptionField = styled(StyledTextField)(({ theme }) => ({
 	},
 }));
 
-const PostPopup = ({ open, closePopup, postIdToEdit }) => {
+const PostPopup = ({ open, closePopup, savePost }) => {
   const [subject, setSubject] = useState('');
 	const [description, setDescription] = useState('');
 	const [image, setImage] = useState('');
@@ -74,52 +74,66 @@ const PostPopup = ({ open, closePopup, postIdToEdit }) => {
 		setImage(file);
 	}
 
+  const handlePostSave = () => {
+    savePost(
+      subject,
+      description,
+      image
+    );
+  };
+
 	return (
-		<Popup open={open} title='Create a post' helperText='Write something for your post' actionButtonText='Publish'
-		closePopup={closePopup}
-		content={
-			<>
-				<Typography variant='h6' fontWeight='600'>Subject</Typography>
-				<PlaceAroundInput>
-					<StyledTextField
-						placeholder="Post title"
-            onChange={(e) => setSubject(e.target.value)}
-            value={subject}
-					/>
-				</PlaceAroundInput>
-				<ImageContainer>
-					{
-						image ? (
-							<img src={image} width='50%' />
-						) : (
-							<>
-								<input
-									accept="image/*"
-									style={{ display: 'none'}}
-									id="contained-button-file"
-									type="file"
-									onChange={addImage}
-								/>
-								<label htmlFor="contained-button-file">
-									<ImageUploader component="span" variant='outlined' >
-										<CropOriginalIcon /> Add your image
-									</ImageUploader>
-								</label>
-							</>
-						)
-					}
-				</ImageContainer>
-				<hr style={{ margin: '30px 0px'}}/>
-				<Typography variant='h6' fontWeight='600'>What's on your mind?</Typography>
-				<PlaceAroundInput>
-					<DescriptionField
-						placeholder="Type here"
-						multiline
-            onChange={(e) => setDescription(e.target.value)}
-            value={description}
-					/>
-				</PlaceAroundInput>
-			</>}
+		<Popup
+      open={open}
+      title='Create a post'
+      helperText='Write something for your post'
+      actionButtonText='Publish'
+		  closePopup={closePopup}
+      actionButtonHandler={handlePostSave}
+      content={
+        <>
+          <Typography variant='h6' fontWeight='600'>Subject</Typography>
+          <PlaceAroundInput>
+            <StyledTextField
+              placeholder="Post title"
+              onChange={(e) => setSubject(e.target.value)}
+              value={subject}
+            />
+          </PlaceAroundInput>
+          <ImageContainer>
+            {
+              image ? (
+                <img src={image} width='50%' />
+              ) : (
+                <>
+                  <input
+                    accept="image/*"
+                    style={{ display: 'none'}}
+                    id="contained-button-file"
+                    type="file"
+                    onChange={addImage}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <ImageUploader component="span" variant='outlined' >
+                      <CropOriginalIcon /> Add your image
+                    </ImageUploader>
+                  </label>
+                </>
+              )
+            }
+          </ImageContainer>
+          <hr style={{ margin: '30px 0px'}}/>
+          <Typography variant='h6' fontWeight='600'>What's on your mind?</Typography>
+          <PlaceAroundInput>
+            <DescriptionField
+              placeholder="Type here"
+              multiline
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+            />
+          </PlaceAroundInput>
+        </>
+      }
 		/>
 	)
 };
