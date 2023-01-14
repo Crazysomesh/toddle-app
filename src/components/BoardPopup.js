@@ -39,8 +39,7 @@ const StyledInputBase = styled(TextField)(({ theme }) => ({
 	},
 }));
 
-const CreateBoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
-
+const BoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState('');
 
@@ -48,10 +47,9 @@ const CreateBoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
     const allBoards = JSON.parse(localStorage.getItem('boards'));
     if (allBoards) {
       const board = allBoards.find(b => b.id === boardIdToEdit);
-      if (board) {
-        setTitle(board.title);
-        setColor(board.color);
-      }
+			console.log({ board });
+			setTitle(board?.title || '');
+			setColor(board?.color || '');
     }
   }, [boardIdToEdit]);
 
@@ -134,4 +132,4 @@ const CreateBoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
 	)
 };
 
-export default CreateBoardPopup;
+export default BoardPopup;

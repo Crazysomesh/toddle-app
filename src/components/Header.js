@@ -9,7 +9,7 @@ import {
   Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React from 'react';
+import React, { useState } from 'react';
 
 import toddleIcon from '../assets/images/toddle-logo.svg';
 
@@ -64,7 +64,12 @@ const CreateButton = styled(Button)(() => ({
   },
 }));
 
-function Header({ newBoard }) {
+const Header = ({ newBoard, filterBoards }) => {
+  const handleSearch = (e) => {
+    const str = e?.target?.value || '';
+    filterBoards(str.trim());
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar>
@@ -86,6 +91,7 @@ function Header({ newBoard }) {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
+                onChange={handleSearch}
               />
             </Search>
             <CreateButton onClick={newBoard}>

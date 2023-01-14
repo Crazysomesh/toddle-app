@@ -17,7 +17,7 @@ import Header from '../components/Header';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import CreateBoardPopup from '../components/CreateBoardPopup';
+import BoardPopup from '../components/BoardPopup';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
@@ -27,15 +27,20 @@ function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [boards, setBoards] = useState([]);
-  const [boardIdToEdit, setBoardIdToEdit] = useState('');
+  const [filteredBoards, setFilteredBoards] = useState([]);
+  const [boardIdToEdit, setBoardIdToEdit] = useState(null);
 
   useEffect(() => {
-    if (!localStorage.getItem('boards')) {
-      localStorage.setItem('boards', JSON.stringify([]));
-    }
-    const allBoards = JSON.parse(localStorage.getItem('boards'));
+    let allBoards = localStorage.getItem('boards');
+    if (!allBoards) localStorage.setItem('boards', JSON.stringify([]));
+    allBoards = allBoards ? JSON.parse(allBoards) : [];
     setBoards([...allBoards]);
+    setFilteredBoards([...allBoards]);
+
+    return () => {};
   }, []);
+
+  useEffect(() => setFilteredBoards([...boards]), [boards]);
 
   const handleClick = (event, id) => {
     setAnchorEl(event.currentTarget);
@@ -58,7 +63,13 @@ function Dashboard() {
     setBoards([...newBoardList]);
     localStorage.setItem('boards', JSON.stringify([...newBoardList]));
     handleClose();
-  }
+  };
+
+  const filterBoards = (str) => {
+    let filteredData = [...boards]
+    if (str) filteredData = filteredData.filter((b) => b.title.toLowerCase().includes(str.toLowerCase()));
+    setFilteredBoards([...filteredData]);
+  };
 
   const saveBoard = (board) => {
     const allBoards = [...boards];
@@ -70,6 +81,7 @@ function Dashboard() {
       allBoards[index] = {...board};
     }
     setBoards([...allBoards]);
+    setBoardIdToEdit(null);
     localStorage.setItem('boards', JSON.stringify([...allBoards]));
   };
 
@@ -90,21 +102,21 @@ function Dashboard() {
     }
   ]
 
-  const onButtonClick = () => {
-    setBoardIdToEdit('');
+  const openNewBoardPopup = () => {
+    setBoardIdToEdit(null);
     setBoardModal(true);
   };
 
   return (
     <>
-      <Header newBoard={onButtonClick} />
+      <Header newBoard={openNewBoardPopup} filterBoards={filterBoards} />
       <Box sx={{ padding: '40px 72px 0px' }}>
         <Box>
           <h2>My Boards</h2>
         </Box>
         <Grid container spacing={2}>
-          {boards.map(board => (
-            <Grid item xs={4}>
+          {filteredBoards.map(board => (
+            <Grid item xs={4} key={board.id}>
               <Box
                 key={board.id}
                 sx={{
@@ -166,7 +178,7 @@ function Dashboard() {
           </MenuItem>
         ))}
       </Menu>
-      <CreateBoardPopup
+      <BoardPopup
         open={boardModal}
         closePopup={() => setBoardModal(false)}
         saveBoard={saveBoard}
