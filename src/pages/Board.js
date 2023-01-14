@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
-import PostsHeader from '../components/PostsHeader';
+import BoardHeader from '../components/BoardHeader';
 import PostCard from '../components/Card';
 import PostPopup from '../components/PostPopup';
 
@@ -24,20 +24,19 @@ const CreateButton = styled(Button)(() => ({
 
 const Board = () => {
   const { id } = useParams();
-  console.log({ id });
   const [postPopup, setPostPopup] = useState(false);
   const [board, setBoard] = useState({});
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   useEffect(() => {
     const boards = JSON.parse(localStorage.getItem('boards'));
-    if (!boards) {
-      return;
+    if (boards) {
+      const currentBoard = boards.find(b => b.id === id);
+      if (currentBoard) {
+        setBoard({...currentBoard});
+        setFilteredPosts([...currentBoard.posts])
+      }
     }
-    const currentBoard = boards.find(b => b.id === id);
-    if (!currentBoard) {
-      return;
-    }
-    setBoard({...currentBoard});
   }, [id]);
 
   const savePost = (title, description, image) => {
@@ -60,14 +59,20 @@ const Board = () => {
       likes: 0
     }
     currentBoard.posts.push(post);
+    setFilteredPosts([...currentBoard.posts]);
     boards[index] = currentBoard;
-    console.log(boards[index]);
     localStorage.setItem('boards', JSON.stringify(boards));
+  };
+
+  const filterPosts = (str) => {
+    let filteredData = [...board?.posts]
+    if (str) filteredData = filteredData.filter((b) => b.title.toLowerCase().includes(str.toLowerCase()));
+    setFilteredPosts([...filteredData]);
   };
 
   return (
     <>
-      <PostsHeader />
+      <BoardHeader board={board} filterPosts={filterPosts} />
       <Box sx={{ padding: '40px 72px 0px' }}>
         <Grid container justifyContent='space-between'>
           <Grid item>
@@ -88,7 +93,7 @@ const Board = () => {
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          {board?.posts?.map(post => (
+          {filteredPosts.map(post => (
             <Grid item xs={4}>      
               <PostCard
                 key={post.id}
