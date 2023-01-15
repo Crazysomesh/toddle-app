@@ -6,6 +6,8 @@ import {
   Box,
   Button,
   Grid,
+  Menu,
+  MenuItem,
   Typography,
 } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +29,7 @@ const Board = () => {
   const [postPopup, setPostPopup] = useState(false);
   const [board, setBoard] = useState({});
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [postIdToEdit, setPostIdToEdit] = useState(null);
 
   useEffect(() => {
     const boards = JSON.parse(localStorage.getItem('boards'));
@@ -38,6 +41,20 @@ const Board = () => {
       }
     }
   }, [id]);
+
+  const editPost = () => {
+    setBoardModal(true);
+  };
+
+  const deletePost = () => {
+    const newPostslist = board.posts.filter((p) => p.id !== postIdToEdit);
+    const newFilteredList = filteredPosts.filter((p) => p.id !== postIdToEdit);
+    setFilteredPosts([...newFilteredList]);
+    const boards = JSON.parse(localStorage.getItem('boards'));
+    const index = boards.findIndex(p => p.id === id);
+    boards[index].posts = [...newPostslist];
+    localStorage.setItem('boards', JSON.stringify(boards));
+  };
 
   const savePost = (title, description, image) => {
     const postId = uuidv4();
@@ -96,11 +113,15 @@ const Board = () => {
             <Grid item xs={4} key={`${post.id}-container`}>      
               <Post
                 key={post.id}
+                post={post}
                 imageURL={post.image}
                 content={post.description}
                 title={post.title}
                 subHeader={post.timestamp}
                 likes={post.likes}
+                setPostIdToEdit={setPostIdToEdit}
+                editPost={editPost}
+                deletePost={deletePost}
               />
             </Grid>
           ))}

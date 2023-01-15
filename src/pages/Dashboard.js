@@ -169,7 +169,7 @@ function Dashboard() {
         onClose={handleClose}
       >
         {options.map(({ label, id, icon, handleMenuClick, color }, idx) => (
-          <MenuItem key={`${id}-idx`} onClick={() => handleMenuClick()}>
+          <MenuItem key={`${id}-${idx}`} onClick={() => handleMenuClick()}>
             <Grid container style={{ color }} alignItems='center'>
               <Grid item>{icon}</Grid>
               &nbsp;
