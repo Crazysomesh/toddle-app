@@ -64,11 +64,10 @@ const BackIcon = styled(ChevronLeftIcon)(() => ({
   cursor: 'pointer',
 }))
 
-const BoardHeader = ({ board, filterPosts }) => {
+const BoardHeader = ({ board, filterPosts, showBookMarked, setShowBookMarked }) => {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState(null);
-  const [showBookmarked, setShowBookmarked] = useState(false);
 
   const onMouseLeave = () => {
     setShowSearch(Boolean(search?.trim) && search !== '');
@@ -81,7 +80,7 @@ const BoardHeader = ({ board, filterPosts }) => {
   }
 
   const handleBookmarkToggle = () => {
-    setShowBookmarked((val) => !val);
+    setShowBookMarked((val) => !val);
   }
 
   return (
@@ -150,7 +149,7 @@ const BoardHeader = ({ board, filterPosts }) => {
             />
             <IconButton onClick={handleBookmarkToggle} disableRipple>
               {
-                showBookmarked ? (
+                showBookMarked ? (
                   <BookmarkIcon
                     sx={{
                       height: '17.5px',

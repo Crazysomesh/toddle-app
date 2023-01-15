@@ -30,6 +30,7 @@ const Board = () => {
   const [board, setBoard] = useState({});
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [postIdToEdit, setPostIdToEdit] = useState(null);
+  const [showBookMarked, setShowBookMarked] = useState(false);
 
   useEffect(() => {
     const boards = JSON.parse(localStorage.getItem('boards'));
@@ -46,13 +47,22 @@ const Board = () => {
     setBoardModal(true);
   };
 
+  const togglePostBookmark = (postId) => {
+    const boards = JSON.parse(localStorage.getItem('boards'));
+    const index = boards.findIndex(p => p.id === id);
+    boards[index].posts.forEach((p) => {
+      if (p.id === postId) p.isBookMarked = !Boolean(p.isBookMarked);
+    });
+    setBoard({...boards[index]});
+    localStorage.setItem('boards', JSON.stringify(boards));
+  };
+
   const deletePost = () => {
     const newPostslist = board.posts.filter((p) => p.id !== postIdToEdit);
-    const newFilteredList = filteredPosts.filter((p) => p.id !== postIdToEdit);
-    setFilteredPosts([...newFilteredList]);
     const boards = JSON.parse(localStorage.getItem('boards'));
     const index = boards.findIndex(p => p.id === id);
     boards[index].posts = [...newPostslist];
+    setBoard({...boards[index]});
     localStorage.setItem('boards', JSON.stringify(boards));
   };
 
@@ -72,8 +82,8 @@ const Board = () => {
           likes: 0
         }
         currentBoard.posts.push(post);
-        setFilteredPosts([...currentBoard.posts]);
         boards[index] = currentBoard;
+        setBoard({...currentBoard});
         localStorage.setItem('boards', JSON.stringify(boards));
         setPostPopup(false);
       } 
@@ -82,13 +92,19 @@ const Board = () => {
 
   const filterPosts = (str) => {
     let filteredData = [...board?.posts]
-    if (str) filteredData = filteredData.filter((b) => b.title.toLowerCase().includes(str.toLowerCase()));
+    if (str) filteredData = filteredData.filter((p) => p.title.toLowerCase().includes(str.toLowerCase()));
+    if (showBookMarked) filteredData = filteredData.filter((p) => p.isBookMarked);
     setFilteredPosts([...filteredData]);
   };
 
+  useEffect(() => {
+    if (Object.keys(board).length > 0) filterPosts();
+  }, [board, showBookMarked]);
+
+
   return (
     <Box sx={{ backgroundColor: '#EBFCFF', height: '100vh' }}>
-      <BoardHeader board={board} filterPosts={filterPosts} />
+      <BoardHeader board={board} filterPosts={filterPosts} showBookMarked={showBookMarked} setShowBookMarked={setShowBookMarked} />
       <Box sx={{ margin: '40px 72px 0px' }}>
         <Grid container justifyContent='space-between'>
           <Grid item>
@@ -114,14 +130,10 @@ const Board = () => {
               <Post
                 key={post.id}
                 post={post}
-                imageURL={post.image}
-                content={post.description}
-                title={post.title}
-                subHeader={post.timestamp}
-                likes={post.likes}
                 setPostIdToEdit={setPostIdToEdit}
                 editPost={editPost}
                 deletePost={deletePost}
+                togglePostBookmark={togglePostBookmark}
               />
             </Grid>
           ))}

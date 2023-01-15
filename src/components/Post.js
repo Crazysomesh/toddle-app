@@ -21,12 +21,13 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const ContentConatiner = styled(Box)(({ theme }) => ({
   margin: theme.spacing(2),
 }))
 
-const Post = ({ post, imageURL, title, content, subHeader, likes, setPostIdToEdit, editPost, deletePost }) => {
+const Post = ({ post, setPostIdToEdit, editPost, deletePost, togglePostBookmark }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -78,26 +79,46 @@ const Post = ({ post, imageURL, title, content, subHeader, likes, setPostIdToEdi
       <CardHeader
         action={
           <div>
-            <IconButton>
-              <BookmarkBorderIcon />
+            <IconButton onClick={() => togglePostBookmark(post.id)} disableRipple>
+              {
+                post.isBookMarked ? (
+                  <BookmarkIcon
+                    sx={{
+                      height: '17.5px',
+                      width: '17.5px',
+                      color: '#D33852',
+                      marginLeft: '25px',
+                    }}
+                  />
+                ) : (
+                  <BookmarkBorderIcon
+                    sx={{
+                      height: '17.5px',
+                      width: '17.5px',
+                      color: '#B0B0B0',
+                      marginLeft: '25px',
+                    }}
+                  />
+                )
+              }
             </IconButton>
             <IconButton onClick={(e) => handleClick(e, post.id)}>
               <MoreVertIcon />
             </IconButton>
           </div>
         }
-        title={title}
-        subheader={subHeader}
+        title={post.title}
+        subheader={post.subHeader}
       />
       <CardMedia
         component="img"
         height="194"
-        image={imageURL}
-        alt={title}
+        image={post.image}
+        alt={post.title}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {content}
+          {post.content}
         </Typography>
       </CardContent>
       <hr />
@@ -105,7 +126,7 @@ const Post = ({ post, imageURL, title, content, subHeader, likes, setPostIdToEdi
         <IconButton onClick={onLikeClick}>
           <FavoriteIcon />
         </IconButton>
-        <span>{likes}</span>
+        <span>{post.likes}</span>
       </CardActions>
       </ContentConatiner>
       <Menu
