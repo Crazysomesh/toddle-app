@@ -31,6 +31,7 @@ const Board = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [postIdToEdit, setPostIdToEdit] = useState(null);
   const [showBookMarked, setShowBookMarked] = useState(false);
+  const [postSelected, setPostSelected] = useState({});
 
   useEffect(() => {
     const boards = JSON.parse(localStorage.getItem('boards'));
@@ -43,8 +44,9 @@ const Board = () => {
     }
   }, [id]);
 
-  const editPost = () => {
-    setBoardModal(true);
+  const editPost = (post) => {
+    setPostPopup(true);
+    setPostSelected({...post});
   };
 
   const togglePostBookmark = (postId) => {
@@ -64,6 +66,18 @@ const Board = () => {
     boards[index].posts = [...newPostslist];
     setBoard({...boards[index]});
     localStorage.setItem('boards', JSON.stringify(boards));
+  };
+
+  const editPostSave = (post) => {
+    const boards = JSON.parse(localStorage.getItem('boards'));
+    const currentBoardIndex = boards.findIndex(p => p.id === id);
+    const currentBoard = {...boards[currentBoardIndex]};
+    const currentPostIndex = currentBoard.posts.findIndex(p => p.id === post.id);
+    currentBoard.posts[currentPostIndex] = {...post};
+    boards[currentBoardIndex] = {...currentBoard};
+    setBoard({...boards[currentBoardIndex]});
+    localStorage.setItem('boards', JSON.stringify([...boards]));
+    setPostPopup(false);
   };
 
   const savePost = (title, description, image) => {
@@ -101,6 +115,23 @@ const Board = () => {
     if (Object.keys(board).length > 0) filterPosts();
   }, [board, showBookMarked]);
 
+  const handleLikeClick = (postId) => {
+    const boards = JSON.parse(localStorage.getItem('boards'));
+    if (boards) {
+      const currentBoardIndex = boards.findIndex(b => b.id === id);
+      if (currentBoardIndex > -1) {
+        const currentPostIndex = boards[currentBoardIndex].posts.findIndex(p => p.id === postId);
+        if (currentPostIndex > -1) {
+          const currentPost = {...boards[currentBoardIndex].posts[currentPostIndex]};
+          currentPost.likes = currentPost.likes + 1;
+          boards[currentBoardIndex].posts[currentPostIndex] = {...currentPost};
+          localStorage.setItem('boards', JSON.stringify(boards));
+          setBoard({...boards[currentBoardIndex]});
+        }
+      }
+    }
+  };
+
 
   return (
     <Box sx={{ backgroundColor: '#EBFCFF', height: '100vh' }}>
@@ -134,12 +165,13 @@ const Board = () => {
                 editPost={editPost}
                 deletePost={deletePost}
                 togglePostBookmark={togglePostBookmark}
+                handleLikeClick={handleLikeClick}
               />
             </Grid>
           ))}
         </Grid>
       </Box>
-      <PostPopup open={postPopup} closePopup={() => setPostPopup(false)} savePost={savePost}  />
+      <PostPopup open={postPopup} closePopup={() => setPostPopup(false)} savePost={savePost} post={postSelected} editPostSave={editPostSave} />
     </Box>
   );
 };

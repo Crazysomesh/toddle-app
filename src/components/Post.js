@@ -27,12 +27,12 @@ const ContentConatiner = styled(Box)(({ theme }) => ({
   margin: theme.spacing(2),
 }))
 
-const Post = ({ post, setPostIdToEdit, editPost, deletePost, togglePostBookmark }) => {
+const Post = ({ post, setPostIdToEdit, editPost, deletePost, togglePostBookmark , handleLikeClick}) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const onLikeClick = () => {
-    console.log('Like button clicked');
+    handleLikeClick(post.id);
   };
 
   const handleClick = (event, id) => {
@@ -48,7 +48,7 @@ const Post = ({ post, setPostIdToEdit, editPost, deletePost, togglePostBookmark 
 
   const edit = () => {
     handleClose();
-    editPost();
+    editPost(post);
   };
 
   const deleteP = () => {

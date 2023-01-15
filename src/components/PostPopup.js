@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from './Popup';
 import {
   Box,
@@ -75,10 +75,18 @@ const ImageContainer = styled(Box)(() => ({
   width: '50%'
 }))
 
-const PostPopup = ({ open, closePopup, savePost }) => {
+const PostPopup = ({ open, closePopup, savePost, post, editPostSave }) => {
   const [subject, setSubject] = useState('');
 	const [description, setDescription] = useState('');
 	const [image, setImage] = useState('');
+
+  useEffect(() => {
+    if (post) {
+      setSubject(post.title);
+      setDescription(post.description);
+      setImage(post.image);
+    }
+  }, [post]);
 
 	const addImage = (e) => {
 		const file = e.target.files[0];
@@ -89,11 +97,18 @@ const PostPopup = ({ open, closePopup, savePost }) => {
 	}
 
   const handlePostSave = () => {
-    savePost(
-      subject,
-      description,
-      image
-    );
+    if (post) {
+      post.title = subject;
+      post.description = description;
+      post.image = image;
+      editPostSave(post);
+    } else {
+      savePost(
+        subject,
+        description,
+        image
+      );
+    }
   };
 
   const deleteImage = () => {
@@ -105,7 +120,7 @@ const PostPopup = ({ open, closePopup, savePost }) => {
       open={open}
       title='Create a post'
       helperText='Write something for your post'
-      actionButtonText='Publish'
+      actionButtonText={!post ? 'Publish' : 'Update'}
 		  closePopup={closePopup}
       actionButtonHandler={handlePostSave}
       content={
