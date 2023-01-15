@@ -1,7 +1,7 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Menu, MenuItem, Grid } from '@mui/material';
+import { Box, Menu, MenuItem, Grid, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import React, { useState, useEffect } from 'react';
@@ -160,6 +160,11 @@ function Dashboard() {
               </BoardBox>
             </Grid>
           ))}
+          {filteredBoards.length === 0 && (
+            <Typography variant="h6">
+              Create a new board by clicking on the &apos;+&apos; button above
+            </Typography>
+          )}
         </Grid>
       </ContainerBox>
       <Menu anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
