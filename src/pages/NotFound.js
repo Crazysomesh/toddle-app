@@ -1,17 +1,22 @@
+import { Box, Button } from '@mui/material';
 import React from 'react';
-import { useRouteError } from 'react-router-dom';
+import { useNavigate, useRouteError } from 'react-router-dom';
 
 function ErrorPage() {
   const error = useRouteError();
+  const navigate = useNavigate();
 
   return (
-    <div>
+    <Box>
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-    </div>
+      <Button variant="contained" onClick={() => navigate('/')}>
+        Go to Dashboard
+      </Button>
+    </Box>
   );
 }
 

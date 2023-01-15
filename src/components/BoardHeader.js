@@ -41,15 +41,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingLeft: theme.spacing(6),
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
   },
 }));
 
@@ -58,8 +52,57 @@ const StyledAppBar = styled(AppBar)(() => ({
   position: 'static',
 }));
 
-const BackIcon = styled(ChevronLeftIcon)(() => ({
+const BackIcon = styled(ChevronLeftIcon)(({ theme }) => ({
   cursor: 'pointer',
+  color: '#717171',
+  margin: theme.spacing(1.25),
+}));
+
+const TitleContainer = styled(Box)(() => ({
+  flexGrow: 1,
+  display: 'flex',
+  alignItems: 'center',
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  fontStyle: 'normal',
+  fontWeight: 700,
+  fontSize: theme.spacing(2.25),
+  lineHeight: theme.spacing(3),
+  color: '#222222',
+  margin: theme.spacing(1.25),
+  display: 'flex',
+}));
+
+const ActionContainer = styled(Box)(() => ({
+  display: 'flex',
+}));
+
+const SearchPlaceholder = styled(SearchIcon)(({ theme }) => ({
+  height: theme.spacing(2.25),
+  width: theme.spacing(2.25),
+  color: '#B0B0B0',
+}));
+
+const VerticalLine = styled(Box)(({ theme }) => ({
+  width: '1px',
+  height: 'auto',
+  background: '#B0B0B0',
+  marginLeft: theme.spacing(3),
+}));
+
+const BookmarkEmpty = styled(BookmarkBorderIcon)(({ theme }) => ({
+  height: theme.spacing(2.25),
+  width: theme.spacing(2.25),
+  color: '#B0B0B0',
+  marginLeft: theme.spacing(3),
+}));
+
+const Bookmark = styled(BookmarkIcon)(({ theme }) => ({
+  height: theme.spacing(2.25),
+  width: theme.spacing(2.25),
+  color: '#D33852',
+  marginLeft: theme.spacing(3),
 }));
 
 const BoardHeader = ({
@@ -90,39 +133,13 @@ const BoardHeader = ({
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar>
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{
-              flexGrow: 1,
-              display: { xs: 'none', sm: 'flex' },
-              alignItems: 'center',
-            }}
-          >
-            <BackIcon
-              sx={{ color: '#717171', margin: '10px' }}
-              onClick={() => navigate('/')}
-            />
+          <TitleContainer>
+            <BackIcon onClick={() => navigate('/')} />
             <img src={toddleIcon} alt="toddleIcon" />
-            <Box sx={{ display: 'flex' }}>
-              <Box
-                sx={{
-                  fontFamily: 'Avenir Next',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  fontSize: '18px',
-                  lineHeight: '24px',
-                  color: '#222222',
-                  margin: '10px',
-                }}
-              >
-                {board.title}
-              </Box>
-            </Box>
-          </Typography>
+            <Title>{board.title}</Title>
+          </TitleContainer>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <ActionContainer>
             <Box
               onMouseEnter={() => setShowSearch(true)}
               onMouseLeave={() => onMouseLeave()}
@@ -134,52 +151,20 @@ const BoardHeader = ({
                   </SearchIconWrapper>
                   <StyledInputBase
                     placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
                     onChange={handleSearch}
                   />
                 </Search>
               ) : (
                 <IconButton>
-                  <SearchIcon
-                    sx={{
-                      height: '17.5px',
-                      width: '17.5px',
-                      color: '#B0B0B0',
-                    }}
-                  />
+                  <SearchPlaceholder />
                 </IconButton>
               )}
             </Box>
-            <Box
-              sx={{
-                width: '1px',
-                height: 'auto',
-                background: '#B0B0B0',
-                marginLeft: '25px',
-              }}
-            />
+            <VerticalLine />
             <IconButton onClick={handleBookmarkToggle} disableRipple>
-              {showBookMarked ? (
-                <BookmarkIcon
-                  sx={{
-                    height: '17.5px',
-                    width: '17.5px',
-                    color: '#D33852',
-                    marginLeft: '25px',
-                  }}
-                />
-              ) : (
-                <BookmarkBorderIcon
-                  sx={{
-                    height: '17.5px',
-                    width: '17.5px',
-                    color: '#B0B0B0',
-                    marginLeft: '25px',
-                  }}
-                />
-              )}
+              {showBookMarked ? <Bookmark /> : <BookmarkEmpty />}
             </IconButton>
-          </Box>
+          </ActionContainer>
         </Toolbar>
       </StyledAppBar>
     </Box>

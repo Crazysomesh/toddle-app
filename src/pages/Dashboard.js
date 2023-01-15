@@ -3,12 +3,50 @@ import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Menu, MenuItem, Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import BoardPopup from '../components/BoardPopup';
 import Header from '../components/Header';
+
+const BoardBox = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  marginTop: theme.spacing(4),
+  height: theme.spacing(10),
+  width: theme.spacing(45.5),
+  border: '1px solid #EBEBEB',
+  borderRadius: theme.spacing(1),
+}));
+
+const ColorBox = styled(Box)(({ theme, color }) => ({
+  width: theme.spacing(10),
+  height: theme.spacing(10),
+  backgroundColor: color,
+}));
+
+const ContentBox = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  fontFamily: 'Avenir Next',
+  fontStyle: 'normal',
+  fontWeight: theme.spacing(62.5),
+  fontSize: theme.spacing(1.75),
+  lineHeight: theme.spacing(2.5),
+  bottom: theme.spacing(3.75),
+  left: theme.spacing(13),
+  cursor: 'pointer',
+}));
+
+const ContainerBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(5, 9, 0),
+}));
+
+const IconBox = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2.25),
+  right: 0,
+}));
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -102,63 +140,28 @@ function Dashboard() {
   return (
     <>
       <Header newBoard={openNewBoardPopup} filterBoards={filterBoards} />
-      <Box sx={{ padding: '40px 72px 0px' }}>
+      <ContainerBox>
         <Box>
           <h2>My Boards</h2>
         </Box>
         <Grid container spacing={2}>
           {filteredBoards.map((board) => (
             <Grid item xs={4} key={board.id}>
-              <Box
-                key={board.id}
-                sx={{
-                  position: 'relative',
-                  marginTop: '32px',
-                  height: '80px',
-                  width: '364px',
-                  border: '1px solid #EBEBEB',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: '80px',
-                    height: '80px',
-                    backgroundColor: board.color,
-                  }}
-                ></Box>
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    fontFamily: 'Avenir Next',
-                    fontStyle: 'normal',
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    bottom: '30px',
-                    left: '104px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => navigate(`/board/${board.id}`)}
-                >
+              <BoardBox key={board.id}>
+                <ColorBox color={board.color}></ColorBox>
+                <ContentBox onClick={() => navigate(`/board/${board.id}`)}>
                   {board.title}
-                </Box>
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    bottom: '18px',
-                    right: 0,
-                  }}
-                >
+                </ContentBox>
+                <IconBox>
                   <IconButton onClick={(e) => handleClick(e, board.id)}>
                     <MoreVertIcon />
                   </IconButton>
-                </Box>
-              </Box>
+                </IconBox>
+              </BoardBox>
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </ContainerBox>
       <Menu anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
         {options.map(({ label, id, icon, handleMenuClick, color }, idx) => (
           <MenuItem key={`${id}-${idx}`} onClick={() => handleMenuClick()}>

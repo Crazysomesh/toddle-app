@@ -66,6 +66,20 @@ const ImageContainer = styled(Box)(() => ({
   width: '50%',
 }));
 
+const HorizontalLine = styled('hr')(({ theme }) => ({
+  margin: theme.spacing(3.75, 0),
+}));
+
+const HiddenInput = styled('input')(() => ({
+  display: 'none',
+}));
+
+const Image = styled('img')(() => ({
+  width: '100%',
+  display: 'block',
+  objectFit: 'cover',
+}));
+
 const PostPopup = ({ open, closePopup, savePost, post, editPostSave }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
@@ -107,7 +121,7 @@ const PostPopup = ({ open, closePopup, savePost, post, editPostSave }) => {
       open={open}
       title="Create a post"
       helperText="Write something for your post"
-      actionButtonText={'Publish'}
+      actionButtonText="Publish"
       closePopup={closePopup}
       actionButtonHandler={handlePostSave}
       content={
@@ -125,21 +139,13 @@ const PostPopup = ({ open, closePopup, savePost, post, editPostSave }) => {
           <ImageWrapper>
             {image ? (
               <ImageContainer>
-                <img
-                  src={image}
-                  style={{
-                    width: '100%',
-                    display: 'block',
-                    objectFit: 'cover',
-                  }}
-                />
+                <Image src={image} />
                 <CancelButton onClick={deleteImage} />
               </ImageContainer>
             ) : (
               <>
-                <input
+                <HiddenInput
                   accept="image/*"
-                  style={{ display: 'none' }}
                   id="contained-button-file"
                   type="file"
                   onChange={addImage}
@@ -152,7 +158,7 @@ const PostPopup = ({ open, closePopup, savePost, post, editPostSave }) => {
               </>
             )}
           </ImageWrapper>
-          <hr style={{ margin: '30px 0px' }} />
+          <HorizontalLine />
           <Typography variant="h6" fontWeight="600">
             What&apos;s on your mind?
           </Typography>

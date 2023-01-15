@@ -19,6 +19,24 @@ const ContentConatiner = styled(Box)(({ theme }) => ({
   margin: theme.spacing(2),
 }));
 
+const PostContainer = styled(Card)(({ theme }) => ({
+  maxWidth: theme.spacing(43.25),
+}));
+
+const BookmarkEmpty = styled(BookmarkBorderIcon)(({ theme }) => ({
+  height: theme.spacing(2.25),
+  width: theme.spacing(2.25),
+  color: '#B0B0B0',
+  marginLeft: theme.spacing(3),
+}));
+
+const Bookmark = styled(BookmarkIcon)(({ theme }) => ({
+  height: theme.spacing(2.25),
+  width: theme.spacing(2.25),
+  color: '#D33852',
+  marginLeft: theme.spacing(3),
+}));
+
 const Post = ({
   post,
   setPostIdToEdit,
@@ -73,7 +91,7 @@ const Post = ({
   ];
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <PostContainer>
       <ContentConatiner>
         <CardHeader
           action={
@@ -82,25 +100,7 @@ const Post = ({
                 onClick={() => togglePostBookmark(post.id)}
                 disableRipple
               >
-                {post.isBookMarked ? (
-                  <BookmarkIcon
-                    sx={{
-                      height: '17.5px',
-                      width: '17.5px',
-                      color: '#D33852',
-                      marginLeft: '25px',
-                    }}
-                  />
-                ) : (
-                  <BookmarkBorderIcon
-                    sx={{
-                      height: '17.5px',
-                      width: '17.5px',
-                      color: '#B0B0B0',
-                      marginLeft: '25px',
-                    }}
-                  />
-                )}
+                {post.isBookMarked ? <Bookmark /> : <BookmarkEmpty />}
               </IconButton>
               <IconButton onClick={(e) => handleClick(e, post.id)}>
                 <MoreVertIcon />
@@ -140,7 +140,7 @@ const Post = ({
           </MenuItem>
         ))}
       </Menu>
-    </Card>
+    </PostContainer>
   );
 };
 

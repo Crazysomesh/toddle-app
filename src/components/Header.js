@@ -1,13 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  InputBase,
-  Button,
-} from '@mui/material';
+import { AppBar, Box, Toolbar, InputBase, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
@@ -39,15 +32,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingLeft: theme.spacing(6),
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
   },
 }));
 
@@ -64,6 +51,22 @@ const CreateButton = styled(Button)(() => ({
   },
 }));
 
+const LogoContainer = styled(Box)(() => ({
+  flexGrow: 1,
+  display: 'block',
+}));
+
+const ActionContainer = styled(Box)(() => ({
+  display: 'flex',
+}));
+
+const PlusIcon = styled(AddIcon)(({ theme }) => ({
+  color: 'white',
+  height: theme.spacing(2),
+  width: theme.spacing(2),
+  marginRight: theme.spacing(0.5),
+}));
+
 const Header = ({ newBoard, filterBoards }) => {
   const handleSearch = (e) => {
     const str = e?.target?.value || '';
@@ -74,38 +77,22 @@ const Header = ({ newBoard, filterBoards }) => {
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar>
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
+          <LogoContainer>
             <img src={toddleIcon} alt="toddleIcon" />
-          </Typography>
+          </LogoContainer>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <ActionContainer>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon color="#717171" />
               </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={handleSearch}
-              />
+              <StyledInputBase placeholder="Search…" onChange={handleSearch} />
             </Search>
             <CreateButton onClick={newBoard}>
-              <AddIcon
-                sx={{
-                  color: 'white',
-                  height: '16px',
-                  width: '16px',
-                  marginRight: '4px',
-                }}
-              />
+              <PlusIcon />
               Create new board
             </CreateButton>
-          </Box>
+          </ActionContainer>
         </Toolbar>
       </StyledAppBar>
     </Box>

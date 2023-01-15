@@ -23,12 +23,38 @@ const StyledInputBase = styled(TextField)(({ theme }) => ({
     padding: theme.spacing(1),
     backgroundColor: 'white',
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      '&:focus': {
-        width: '20ch',
-      },
-    },
   },
+}));
+
+const ColorPickerTitle = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(5),
+  fontStyle: 'normal',
+  fontWeight: 700,
+  fontSize: theme.spacing(2.5),
+  lineHeight: theme.spacing(3.5),
+}));
+
+const ColorPickerText = styled(Box)(({ theme }) => ({
+  fontStyle: 'normal',
+  fontWeight: 500,
+  fontSize: theme.spacing(1.75),
+  lineHeight: theme.spacing(2.5),
+}));
+
+const ColorPickerContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing,
+  display: 'flex',
+}));
+
+const Color = styled(Box)(({ theme, color, selectedColor }) => ({
+  boxSizing: 'border-box',
+  width: theme.spacing(3),
+  height: theme.spacing(3),
+  background: color,
+  border: color === selectedColor ? '1.5px solid #23856D' : 'none',
+  borderRadius: '50%',
+  marginRight: theme.spacing(1.25),
+  cursor: 'pointer',
 }));
 
 const BoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
@@ -39,7 +65,6 @@ const BoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
     const allBoards = JSON.parse(localStorage.getItem('boards'));
     if (allBoards) {
       const board = allBoards.find((b) => b.id === boardIdToEdit);
-      console.log({ board });
       setTitle(board?.title || '');
       setColor(board?.color || '');
     }
@@ -71,54 +96,26 @@ const BoardPopup = ({ open, closePopup, saveBoard, boardIdToEdit }) => {
             <PlaceAroundInput>
               <StyledInputBase
                 placeholder="Board title"
-                inputProps={{ 'aria-label': 'PlaceAroundInput' }}
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
               />
             </PlaceAroundInput>
           </Box>
           <Box>
-            <Box
-              sx={{
-                marginTop: '40px',
-                fontFamily: 'Avenir Next',
-                fontStyle: 'normal',
-                fontWeight: 700,
-                fontSize: '20px',
-                lineHeight: '28px',
-              }}
-            >
-              Select Post Color
-            </Box>
-            <Box
-              sx={{
-                fontFamily: 'Avenir Next',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                fontSize: '14px',
-                lineHeight: '20px',
-              }}
-            >
+            <ColorPickerTitle>Select Post Color</ColorPickerTitle>
+            <ColorPickerText>
               Here are some templates to help you get started
-            </Box>
-            <Box sx={{ marginTop: '16px', display: 'flex' }}>
+            </ColorPickerText>
+            <ColorPickerContainer>
               {COLORS.map((c) => (
-                <Box
+                <Color
                   key={c}
-                  sx={{
-                    boxSizing: 'border-box',
-                    width: '24.05px',
-                    height: '24.05px',
-                    background: c,
-                    border: c === color ? '1.5px solid #23856D' : 'none',
-                    borderRadius: '50%',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                  }}
+                  selectedColor={color}
+                  color={c}
                   onClick={() => setColor(c)}
-                ></Box>
+                />
               ))}
-            </Box>
+            </ColorPickerContainer>
           </Box>
         </>
       }

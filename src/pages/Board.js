@@ -18,6 +18,28 @@ const CreateButton = styled(Button)(() => ({
   },
 }));
 
+const BoardContainer = styled(Box)(() => ({
+  backgroundColor: '#EBFCFF',
+  height: '100vh',
+}));
+
+const StyledAddIcon = styled(AddIcon)(({ theme }) => ({
+  color: 'white',
+  height: theme.spacing(2),
+  width: theme.spacing(2),
+  marginRight: theme.spacing(0.5),
+}));
+
+const GridContainer = styled(Box)(({ theme }) => ({
+  margin: theme.spacing(5, 9, 0),
+  height: 'calc(100% - 130px)',
+}));
+
+const BoardGridContainer = styled(Grid)(({ theme }) => ({
+  height: '100%',
+  paddingTop: theme.spacing(1.25),
+}));
+
 const Board = () => {
   const { id } = useParams();
   const [postPopup, setPostPopup] = useState(false);
@@ -140,33 +162,26 @@ const Board = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#EBFCFF', height: '100vh' }}>
+    <BoardContainer>
       <BoardHeader
         board={board}
         filterPosts={filterPosts}
         showBookMarked={showBookMarked}
         setShowBookMarked={setShowBookMarked}
       />
-      <Box sx={{ margin: '40px 72px 0px', height: 'calc(100% - 130px)' }}>
+      <GridContainer>
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography variant="h4">Your posts</Typography>
           </Grid>
           <Grid item>
             <CreateButton onClick={() => setPostPopup(true)}>
-              <AddIcon
-                sx={{
-                  color: 'white',
-                  height: '16px',
-                  width: '16px',
-                  marginRight: '4px',
-                }}
-              />
+              <StyledAddIcon />
               Create new post
             </CreateButton>
           </Grid>
         </Grid>
-        <Grid container spacing={2} sx={{ height: '100%', paddingTop: '10px' }}>
+        <BoardGridContainer container spacing={2}>
           {filteredPosts.map((post) => (
             <Grid item xs={3} key={`${post.id}-container`}>
               <Post
@@ -181,8 +196,8 @@ const Board = () => {
             </Grid>
           ))}
           {filteredPosts.length === 0 && <BoardEmptyState />}
-        </Grid>
-      </Box>
+        </BoardGridContainer>
+      </GridContainer>
       <PostPopup
         open={postPopup}
         closePopup={() => setPostPopup(false)}
@@ -190,7 +205,7 @@ const Board = () => {
         post={postSelected}
         editPostSave={editPostSave}
       />
-    </Box>
+    </BoardContainer>
   );
 };
 
