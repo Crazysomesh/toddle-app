@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import toddleIcon from '../assets/images/logo.svg';
+import { ROUTES } from '../utils/constants';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -134,7 +135,7 @@ const BoardHeader = ({
       <StyledAppBar>
         <Toolbar>
           <TitleContainer>
-            <BackIcon onClick={() => navigate('/')} />
+            <BackIcon onClick={() => navigate(ROUTES.HOME)} />
             <img src={toddleIcon} alt="toddleIcon" />
             <Title>{board.title}</Title>
           </TitleContainer>

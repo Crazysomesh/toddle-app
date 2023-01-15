@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import BoardPopup from '../components/BoardPopup';
 import Header from '../components/Header';
+import { ROUTES } from '../utils/constants';
 
 const BoardBox = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -149,7 +150,7 @@ function Dashboard() {
             <Grid item xs={4} key={board.id}>
               <BoardBox key={board.id}>
                 <ColorBox color={board.color}></ColorBox>
-                <ContentBox onClick={() => navigate(`/board/${board.id}`)}>
+                <ContentBox onClick={() => navigate(ROUTES.BOARD.replace(':id', board.id))}>
                   {board.title}
                 </ContentBox>
                 <IconBox>

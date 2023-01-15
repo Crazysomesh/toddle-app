@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material';
 import React from 'react';
 import { useNavigate, useRouteError } from 'react-router-dom';
+import { ROUTES } from '../utils/constants';
 
 function ErrorPage() {
   const error = useRouteError();
@@ -13,7 +14,7 @@ function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      <Button variant="contained" onClick={() => navigate('/')}>
+      <Button variant="contained" onClick={() => navigate(ROUTES.HOME)}>
         Go to Dashboard
       </Button>
     </Box>
