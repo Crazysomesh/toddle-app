@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import emptyState from '../assets/images/emptyState.svg';
+import BoardEmptyState from '../components/BoardEmptyState';
 import BoardHeader from '../components/BoardHeader';
 import Post from '../components/Post';
 import PostPopup from '../components/PostPopup';
@@ -166,9 +166,9 @@ const Board = () => {
             </CreateButton>
           </Grid>
         </Grid>
-        <Grid container spacing={2} sx={{ height: '100%' }}>
+        <Grid container spacing={2} sx={{ height: '100%', paddingTop: '10px' }}>
           {filteredPosts.map((post) => (
-            <Grid item xs={4} key={`${post.id}-container`}>
+            <Grid item xs={3} key={`${post.id}-container`}>
               <Post
                 key={post.id}
                 post={post}
@@ -180,27 +180,7 @@ const Board = () => {
               />
             </Grid>
           ))}
-          {filteredPosts.length === 0 && (
-            <Grid
-              container
-              spacing={1}
-              sx={{ width: '100%', height: '100%' }}
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item>
-                <img src={emptyState} alt="emptyState" />
-              </Grid>
-              <Grid item>
-                <b>Nothing here yet</b>
-              </Grid>
-              <Grid item>
-                Create your first post by clicking on the &apos;+&apos; button
-                above
-              </Grid>
-            </Grid>
-          )}
+          {filteredPosts.length === 0 && <BoardEmptyState />}
         </Grid>
       </Box>
       <PostPopup
