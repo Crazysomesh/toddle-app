@@ -9,7 +9,7 @@ import {
   Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React from 'react';
 
 import toddleIcon from '../assets/images/toddle-logo.svg';
 
@@ -68,7 +68,7 @@ const Header = ({ newBoard, filterBoards }) => {
   const handleSearch = (e) => {
     const str = e?.target?.value || '';
     filterBoards(str.trim());
-  }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -110,6 +110,6 @@ const Header = ({ newBoard, filterBoards }) => {
       </StyledAppBar>
     </Box>
   );
-}
+};
 
 export default Header;

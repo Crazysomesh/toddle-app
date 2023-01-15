@@ -1,22 +1,20 @@
-import AddIcon from '@mui/icons-material/Add';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Box,
   Toolbar,
   Typography,
   InputBase,
-  Button,
   IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useNavigate } from 'react-router-dom';
+
 import toddleIcon from '../assets/images/logo.svg';
-import SearchIcon from '@mui/icons-material/Search';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { useNavigate } from "react-router-dom";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,26 +60,31 @@ const StyledAppBar = styled(AppBar)(() => ({
 
 const BackIcon = styled(ChevronLeftIcon)(() => ({
   cursor: 'pointer',
-}))
+}));
 
-const BoardHeader = ({ board, filterPosts, showBookMarked, setShowBookMarked }) => {
+const BoardHeader = ({
+  board,
+  filterPosts,
+  showBookMarked,
+  setShowBookMarked,
+}) => {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState(null);
 
   const onMouseLeave = () => {
     setShowSearch(Boolean(search?.trim) && search !== '');
-  }
+  };
 
   const handleSearch = (event) => {
-    const str = event?.target?.value
+    const str = event?.target?.value;
     setSearch(str);
     filterPosts(str);
-  }
+  };
 
   const handleBookmarkToggle = () => {
     setShowBookMarked((val) => !val);
-  }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -91,9 +94,16 @@ const BoardHeader = ({ board, filterPosts, showBookMarked, setShowBookMarked }) 
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', sm: 'flex' },
+              alignItems: 'center',
+            }}
           >
-            <BackIcon sx={{ color: '#717171', margin: '10px' }} onClick={() => navigate('/')} />
+            <BackIcon
+              sx={{ color: '#717171', margin: '10px' }}
+              onClick={() => navigate('/')}
+            />
             <img src={toddleIcon} alt="toddleIcon" />
             <Box sx={{ display: 'flex' }}>
               <Box
@@ -113,31 +123,32 @@ const BoardHeader = ({ board, filterPosts, showBookMarked, setShowBookMarked }) 
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Box onMouseEnter={() => setShowSearch(true)} onMouseLeave={() => onMouseLeave()}>
-              {
-                showSearch ? (
-                  <Search>
-                    <SearchIconWrapper>
-                      <SearchIcon color="#717171" />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                      placeholder="Search…"
-                      inputProps={{ 'aria-label': 'search' }}
-                      onChange={handleSearch}
-                    />
-                  </Search>
-                ) : (
-                  <IconButton>
-                    <SearchIcon
-                      sx={{
-                        height: '17.5px',
-                        width: '17.5px',
-                        color: '#B0B0B0',
-                      }}
-                    />
-                  </IconButton>
-                )
-              }
+            <Box
+              onMouseEnter={() => setShowSearch(true)}
+              onMouseLeave={() => onMouseLeave()}
+            >
+              {showSearch ? (
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon color="#717171" />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                    onChange={handleSearch}
+                  />
+                </Search>
+              ) : (
+                <IconButton>
+                  <SearchIcon
+                    sx={{
+                      height: '17.5px',
+                      width: '17.5px',
+                      color: '#B0B0B0',
+                    }}
+                  />
+                </IconButton>
+              )}
             </Box>
             <Box
               sx={{
@@ -148,33 +159,31 @@ const BoardHeader = ({ board, filterPosts, showBookMarked, setShowBookMarked }) 
               }}
             />
             <IconButton onClick={handleBookmarkToggle} disableRipple>
-              {
-                showBookMarked ? (
-                  <BookmarkIcon
-                    sx={{
-                      height: '17.5px',
-                      width: '17.5px',
-                      color: '#D33852',
-                      marginLeft: '25px',
-                    }}
-                  />
-                ) : (
-                  <BookmarkBorderIcon
-                    sx={{
-                      height: '17.5px',
-                      width: '17.5px',
-                      color: '#B0B0B0',
-                      marginLeft: '25px',
-                    }}
-                  />
-                )
-              }
+              {showBookMarked ? (
+                <BookmarkIcon
+                  sx={{
+                    height: '17.5px',
+                    width: '17.5px',
+                    color: '#D33852',
+                    marginLeft: '25px',
+                  }}
+                />
+              ) : (
+                <BookmarkBorderIcon
+                  sx={{
+                    height: '17.5px',
+                    width: '17.5px',
+                    color: '#B0B0B0',
+                    marginLeft: '25px',
+                  }}
+                />
+              )}
             </IconButton>
           </Box>
         </Toolbar>
       </StyledAppBar>
     </Box>
   );
-}
+};
 
 export default BoardHeader;

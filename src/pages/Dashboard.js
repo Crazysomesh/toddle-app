@@ -1,25 +1,14 @@
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  Button,
-  Menu,
-  MenuItem,
-  Grid
-} from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from "react-router-dom";
-
-import Header from '../components/Header';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { styled } from '@mui/material/styles';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import BoardPopup from '../components/BoardPopup';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box, Menu, MenuItem, Grid } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+
+import BoardPopup from '../components/BoardPopup';
+import Header from '../components/Header';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -66,8 +55,11 @@ function Dashboard() {
   };
 
   const filterBoards = (str) => {
-    let filteredData = [...boards]
-    if (str) filteredData = filteredData.filter((b) => b.title.toLowerCase().includes(str.toLowerCase()));
+    let filteredData = [...boards];
+    if (str)
+      filteredData = filteredData.filter((b) =>
+        b.title.toLowerCase().includes(str.toLowerCase())
+      );
     setFilteredBoards([...filteredData]);
   };
 
@@ -75,10 +67,10 @@ function Dashboard() {
     const allBoards = [...boards];
     if (!board.id) {
       board['id'] = uuidv4();
-      allBoards.push({...board});
+      allBoards.push({ ...board });
     } else {
-      const index = allBoards.findIndex(b => b.id === board.id);
-      allBoards[index] = {...board};
+      const index = allBoards.findIndex((b) => b.id === board.id);
+      allBoards[index] = { ...board };
     }
     setBoards([...allBoards]);
     setBoardIdToEdit(null);
@@ -91,16 +83,16 @@ function Dashboard() {
       id: 'edit-board',
       icon: <EditIcon />,
       handleMenuClick: editBoard,
-      color: '#717171'
+      color: '#717171',
     },
     {
       label: 'Delete',
       id: 'delete-board',
       icon: <DeleteOutlineIcon />,
       handleMenuClick: deleteBoard,
-      color: '#D33852'
-    }
-  ]
+      color: '#D33852',
+    },
+  ];
 
   const openNewBoardPopup = () => {
     setBoardIdToEdit(null);
@@ -115,7 +107,7 @@ function Dashboard() {
           <h2>My Boards</h2>
         </Box>
         <Grid container spacing={2}>
-          {filteredBoards.map(board => (
+          {filteredBoards.map((board) => (
             <Grid item xs={4} key={board.id}>
               <Box
                 key={board.id}
@@ -129,7 +121,11 @@ function Dashboard() {
                 }}
               >
                 <Box
-                  sx={{ width: '80px', height: '80px', backgroundColor: board.color }}
+                  sx={{
+                    width: '80px',
+                    height: '80px',
+                    backgroundColor: board.color,
+                  }}
                 ></Box>
                 <Box
                   sx={{
@@ -141,7 +137,7 @@ function Dashboard() {
                     lineHeight: '20px',
                     bottom: '30px',
                     left: '104px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                   onClick={() => navigate(`/board/${board.id}`)}
                 >
@@ -163,14 +159,10 @@ function Dashboard() {
           ))}
         </Grid>
       </Box>
-      <Menu
-        anchorEl={anchorEl}
-        open={openMenu}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchorEl} open={openMenu} onClose={handleClose}>
         {options.map(({ label, id, icon, handleMenuClick, color }, idx) => (
           <MenuItem key={`${id}-${idx}`} onClick={() => handleMenuClick()}>
-            <Grid container style={{ color }} alignItems='center'>
+            <Grid container style={{ color }} alignItems="center">
               <Grid item>{icon}</Grid>
               &nbsp;
               <Grid item>{label}</Grid>

@@ -1,17 +1,11 @@
+import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Button,
-  Grid,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
+import emptyState from '../assets/images/emptyState.svg';
 import BoardHeader from '../components/BoardHeader';
 import Post from '../components/Post';
 import PostPopup from '../components/PostPopup';
@@ -36,46 +30,48 @@ const Board = () => {
   useEffect(() => {
     const boards = JSON.parse(localStorage.getItem('boards'));
     if (boards) {
-      const currentBoard = boards.find(b => b.id === id);
+      const currentBoard = boards.find((b) => b.id === id);
       if (currentBoard) {
-        setBoard({...currentBoard});
-        setFilteredPosts([...currentBoard.posts])
+        setBoard({ ...currentBoard });
+        setFilteredPosts([...currentBoard.posts]);
       }
     }
   }, [id]);
 
   const editPost = (post) => {
     setPostPopup(true);
-    setPostSelected({...post});
+    setPostSelected({ ...post });
   };
 
   const togglePostBookmark = (postId) => {
     const boards = JSON.parse(localStorage.getItem('boards'));
-    const index = boards.findIndex(p => p.id === id);
+    const index = boards.findIndex((p) => p.id === id);
     boards[index].posts.forEach((p) => {
-      if (p.id === postId) p.isBookMarked = !Boolean(p.isBookMarked);
+      if (p.id === postId) p.isBookMarked = !p.isBookMarked;
     });
-    setBoard({...boards[index]});
+    setBoard({ ...boards[index] });
     localStorage.setItem('boards', JSON.stringify(boards));
   };
 
   const deletePost = () => {
     const newPostslist = board.posts.filter((p) => p.id !== postIdToEdit);
     const boards = JSON.parse(localStorage.getItem('boards'));
-    const index = boards.findIndex(p => p.id === id);
+    const index = boards.findIndex((p) => p.id === id);
     boards[index].posts = [...newPostslist];
-    setBoard({...boards[index]});
+    setBoard({ ...boards[index] });
     localStorage.setItem('boards', JSON.stringify(boards));
   };
 
   const editPostSave = (post) => {
     const boards = JSON.parse(localStorage.getItem('boards'));
-    const currentBoardIndex = boards.findIndex(p => p.id === id);
-    const currentBoard = {...boards[currentBoardIndex]};
-    const currentPostIndex = currentBoard.posts.findIndex(p => p.id === post.id);
-    currentBoard.posts[currentPostIndex] = {...post};
-    boards[currentBoardIndex] = {...currentBoard};
-    setBoard({...boards[currentBoardIndex]});
+    const currentBoardIndex = boards.findIndex((p) => p.id === id);
+    const currentBoard = { ...boards[currentBoardIndex] };
+    const currentPostIndex = currentBoard.posts.findIndex(
+      (p) => p.id === post.id
+    );
+    currentBoard.posts[currentPostIndex] = { ...post };
+    boards[currentBoardIndex] = { ...currentBoard };
+    setBoard({ ...boards[currentBoardIndex] });
     localStorage.setItem('boards', JSON.stringify([...boards]));
     setPostPopup(false);
   };
@@ -84,30 +80,35 @@ const Board = () => {
     const postId = uuidv4();
     const boards = JSON.parse(localStorage.getItem('boards'));
     if (boards) {
-      const index = boards.findIndex(p => p.id === id);
+      const index = boards.findIndex((p) => p.id === id);
       if (index > -1) {
-        const currentBoard = {...boards[index]};
+        const currentBoard = { ...boards[index] };
         const post = {
-          id: postId, 
+          id: postId,
           title,
           image,
           description,
           timestamp: new Date().toDateString(),
-          likes: 0
-        }
+          likes: 0,
+        };
         currentBoard.posts.push(post);
         boards[index] = currentBoard;
-        setBoard({...currentBoard});
+        setBoard({ ...currentBoard });
         localStorage.setItem('boards', JSON.stringify(boards));
         setPostPopup(false);
-      } 
+      }
     }
   };
 
   const filterPosts = (str) => {
-    let filteredData = [...board?.posts]
-    if (str) filteredData = filteredData.filter((p) => p.title.toLowerCase().includes(str.toLowerCase()));
-    if (showBookMarked) filteredData = filteredData.filter((p) => p.isBookMarked);
+    const posts = board?.posts ? board.posts : [];
+    let filteredData = [...posts];
+    if (str)
+      filteredData = filteredData.filter((p) =>
+        p.title.toLowerCase().includes(str.toLowerCase())
+      );
+    if (showBookMarked)
+      filteredData = filteredData.filter((p) => p.isBookMarked);
     setFilteredPosts([...filteredData]);
   };
 
@@ -118,28 +119,38 @@ const Board = () => {
   const handleLikeClick = (postId) => {
     const boards = JSON.parse(localStorage.getItem('boards'));
     if (boards) {
-      const currentBoardIndex = boards.findIndex(b => b.id === id);
+      const currentBoardIndex = boards.findIndex((b) => b.id === id);
       if (currentBoardIndex > -1) {
-        const currentPostIndex = boards[currentBoardIndex].posts.findIndex(p => p.id === postId);
+        const currentPostIndex = boards[currentBoardIndex].posts.findIndex(
+          (p) => p.id === postId
+        );
         if (currentPostIndex > -1) {
-          const currentPost = {...boards[currentBoardIndex].posts[currentPostIndex]};
+          const currentPost = {
+            ...boards[currentBoardIndex].posts[currentPostIndex],
+          };
           currentPost.likes = currentPost.likes + 1;
-          boards[currentBoardIndex].posts[currentPostIndex] = {...currentPost};
+          boards[currentBoardIndex].posts[currentPostIndex] = {
+            ...currentPost,
+          };
           localStorage.setItem('boards', JSON.stringify(boards));
-          setBoard({...boards[currentBoardIndex]});
+          setBoard({ ...boards[currentBoardIndex] });
         }
       }
     }
   };
 
-
   return (
     <Box sx={{ backgroundColor: '#EBFCFF', height: '100vh' }}>
-      <BoardHeader board={board} filterPosts={filterPosts} showBookMarked={showBookMarked} setShowBookMarked={setShowBookMarked} />
-      <Box sx={{ margin: '40px 72px 0px' }}>
-        <Grid container justifyContent='space-between'>
+      <BoardHeader
+        board={board}
+        filterPosts={filterPosts}
+        showBookMarked={showBookMarked}
+        setShowBookMarked={setShowBookMarked}
+      />
+      <Box sx={{ margin: '40px 72px 0px', height: 'calc(100% - 130px)' }}>
+        <Grid container justifyContent="space-between">
           <Grid item>
-            <Typography variant='h4'>Your posts</Typography>
+            <Typography variant="h4">Your posts</Typography>
           </Grid>
           <Grid item>
             <CreateButton onClick={() => setPostPopup(true)}>
@@ -155,9 +166,9 @@ const Board = () => {
             </CreateButton>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
-          {filteredPosts.map(post => (
-            <Grid item xs={4} key={`${post.id}-container`}>      
+        <Grid container spacing={2} sx={{ height: '100%' }}>
+          {filteredPosts.map((post) => (
+            <Grid item xs={4} key={`${post.id}-container`}>
               <Post
                 key={post.id}
                 post={post}
@@ -169,9 +180,36 @@ const Board = () => {
               />
             </Grid>
           ))}
+          {filteredPosts.length === 0 && (
+            <Grid
+              container
+              spacing={1}
+              sx={{ width: '100%', height: '100%' }}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item>
+                <img src={emptyState} alt="emptyState" />
+              </Grid>
+              <Grid item>
+                <b>Nothing here yet</b>
+              </Grid>
+              <Grid item>
+                Create your first post by clicking on the &apos;+&apos; button
+                above
+              </Grid>
+            </Grid>
+          )}
         </Grid>
       </Box>
-      <PostPopup open={postPopup} closePopup={() => setPostPopup(false)} savePost={savePost} post={postSelected} editPostSave={editPostSave} />
+      <PostPopup
+        open={postPopup}
+        closePopup={() => setPostPopup(false)}
+        savePost={savePost}
+        post={postSelected}
+        editPostSave={editPostSave}
+      />
     </Box>
   );
 };
