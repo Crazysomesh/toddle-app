@@ -13,6 +13,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import CropOriginalIcon from '@mui/icons-material/CropOriginal';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const PlaceAroundInput = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -34,8 +35,16 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 	},
 }));
 
-const ImageContainer = styled(Box)(({ theme }) => ({
+const ImageWrapper = styled(Box)(({ theme }) => ({
 	marginTop: theme.spacing(2)
+}));
+
+const CancelButton = styled(CancelIcon)(({ theme }) => ({
+  position: 'absolute',
+  top: theme.spacing(-1.25),
+  right: theme.spacing(-1.75),
+    cursor: 'pointer',
+    color: '#D33852'
 }));
 
 const ImageUploader = styled(Button)(({ theme }) => ({
@@ -61,6 +70,11 @@ const DescriptionField = styled(StyledTextField)(({ theme }) => ({
 	},
 }));
 
+const ImageContainer = styled(Box)(() => ({
+  position: 'relative',
+  width: '50%'
+}))
+
 const PostPopup = ({ open, closePopup, savePost }) => {
   const [subject, setSubject] = useState('');
 	const [description, setDescription] = useState('');
@@ -82,6 +96,10 @@ const PostPopup = ({ open, closePopup, savePost }) => {
     );
   };
 
+  const deleteImage = () => {
+    setImage('');
+  };
+
 	return (
 		<Popup
       open={open}
@@ -100,10 +118,15 @@ const PostPopup = ({ open, closePopup, savePost }) => {
               value={subject}
             />
           </PlaceAroundInput>
-          <ImageContainer>
+          <ImageWrapper>
             {
               image ? (
-                <img src={image} width='50%' />
+                <ImageContainer>
+                  <img src={image} style={{ width: '100%',
+  display: 'block',
+  objectFit: 'cover'}} />
+                <CancelButton onClick={deleteImage}/>
+                </ImageContainer>
               ) : (
                 <>
                   <input
@@ -121,7 +144,7 @@ const PostPopup = ({ open, closePopup, savePost }) => {
                 </>
               )
             }
-          </ImageContainer>
+          </ImageWrapper>
           <hr style={{ margin: '30px 0px'}}/>
           <Typography variant='h6' fontWeight='600'>What's on your mind?</Typography>
           <PlaceAroundInput>

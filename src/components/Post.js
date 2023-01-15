@@ -14,17 +14,22 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { Box } from '@mui/material';
 
-export default function PostCard(props) {
+const ContentConatiner = styled(Box)(({ theme }) => ({
+  margin: theme.spacing(2),
+}))
 
-  const { imageURL, title, content, subHeader, likes } = props;
-
+const Post = ({ imageURL, title, content, subHeader, likes }) => {
   const onLikeClick = () => {
     console.log('Like button clicked');
   };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
+    <ContentConatiner>
+
+    
       <CardHeader
         action={
           <div>
@@ -57,6 +62,9 @@ export default function PostCard(props) {
         </IconButton>
         <span>{likes}</span>
       </CardActions>
+      </ContentConatiner>
     </Card>
   );
 }
+
+export default Post;

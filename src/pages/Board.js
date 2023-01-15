@@ -11,7 +11,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 import BoardHeader from '../components/BoardHeader';
-import PostCard from '../components/Card';
+import Post from '../components/Post';
 import PostPopup from '../components/PostPopup';
 
 const CreateButton = styled(Button)(() => ({
@@ -42,26 +42,25 @@ const Board = () => {
   const savePost = (title, description, image) => {
     const postId = uuidv4();
     const boards = JSON.parse(localStorage.getItem('boards'));
-    if (!boards) {
-      return;
+    if (boards) {
+      const index = boards.findIndex(p => p.id === id);
+      if (index > -1) {
+        const currentBoard = {...boards[index]};
+        const post = {
+          id: postId, 
+          title,
+          image,
+          description,
+          timestamp: new Date().toDateString(),
+          likes: 0
+        }
+        currentBoard.posts.push(post);
+        setFilteredPosts([...currentBoard.posts]);
+        boards[index] = currentBoard;
+        localStorage.setItem('boards', JSON.stringify(boards));
+        setPostPopup(false);
+      } 
     }
-    const index = boards.findIndex(p => p.id === id);
-    if (index === -1) {
-      return;
-    } 
-    const currentBoard = {...boards[index]};
-    const post = {
-      id: postId, 
-      title,
-      image,
-      description,
-      timestamp: new Date().toDateString(),
-      likes: 0
-    }
-    currentBoard.posts.push(post);
-    setFilteredPosts([...currentBoard.posts]);
-    boards[index] = currentBoard;
-    localStorage.setItem('boards', JSON.stringify(boards));
   };
 
   const filterPosts = (str) => {
@@ -71,9 +70,9 @@ const Board = () => {
   };
 
   return (
-    <>
+    <Box sx={{ backgroundColor: '#EBFCFF', height: '100vh' }}>
       <BoardHeader board={board} filterPosts={filterPosts} />
-      <Box sx={{ padding: '40px 72px 0px' }}>
+      <Box sx={{ margin: '40px 72px 0px' }}>
         <Grid container justifyContent='space-between'>
           <Grid item>
             <Typography variant='h4'>Your posts</Typography>
@@ -94,8 +93,8 @@ const Board = () => {
         </Grid>
         <Grid container spacing={2}>
           {filteredPosts.map(post => (
-            <Grid item xs={4}>      
-              <PostCard
+            <Grid item xs={4} key={`${post.id}-container`}>      
+              <Post
                 key={post.id}
                 imageURL={post.image}
                 content={post.description}
@@ -108,7 +107,7 @@ const Board = () => {
         </Grid>
       </Box>
       <PostPopup open={postPopup} closePopup={() => setPostPopup(false)} savePost={savePost}  />
-    </>
+    </Box>
   );
 };
 
