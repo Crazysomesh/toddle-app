@@ -150,7 +150,11 @@ function Dashboard() {
             <Grid item xs={4} key={board.id}>
               <BoardBox key={board.id}>
                 <ColorBox color={board.color}></ColorBox>
-                <ContentBox onClick={() => navigate(ROUTES.BOARD.replace(':id', board.id))}>
+                <ContentBox
+                  onClick={() =>
+                    navigate(ROUTES.BOARD.replace(':id', board.id))
+                  }
+                >
                   {board.title}
                 </ContentBox>
                 <IconBox>

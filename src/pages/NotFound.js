@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material';
 import React from 'react';
 import { useNavigate, useRouteError } from 'react-router-dom';
+
 import { ROUTES } from '../utils/constants';
 
 function ErrorPage() {
